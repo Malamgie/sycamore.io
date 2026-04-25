@@ -1,11 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Sycamore</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sycamore | Secure Escrow Platform</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        dark: { 900: '#0B0F19', 800: '#111827', 700: '#1F2937' },
+                        brand: { green: '#22c55e', blue: '#3b82f6' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #0B0F19; color: #f3f4f6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        .gradient-text { background: linear-gradient(to right, #22c55e, #3b82f6); -webkit-background-clip: text; color: transparent; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0B0F19; }
+        ::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-blue selection:text-white">
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2"></div>
+
+    <!-- ================= VIEW: LANDING PAGE ================= -->
+    <div id="view-landing" class="min-h-screen flex flex-col animate-fade-in">
+        <nav class="border-b border-white/10 bg-dark-900/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="logo-container-nav" class="w-10 h-10"></div>
+                    <span class="text-xl font-bold gradient-text tracking-tight">Sycamore</span>
+                </div>
+                <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                    <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+                    <a href="#features" class="hover:text-white transition-colors">Features</a>
+                </div>
+                <button onclick="switchView('auth')" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm border border-white/5 shadow-lg">
+                    Launch App
+                </button>
+            </div>
+        </nav>
+
+        <main class="flex-1">
+            <!-- Hero Section -->
+            <section class="relative pt-32 pb-20 px-6 overflow-hidden">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-blue/20 rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
+                <div class="max-w-4xl mx-auto text-center relative z-10 animate-slide-up">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 border border-brand-green/20 text-brand-green text-xs font-bold uppercase tracking-widest mb-8">
+                        <i class="ph-fill ph-shield-check"></i> Project v1.0
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6 leading-tight">
+                        Trust engineered for <br/><span class="gradient-text">Goods & Crypto.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                        A dual-engine escrow platform designed to eliminate counterparty risk in online marketplaces and P2P cryptocurrency trades. Built with state-machine integrity.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="switchView('auth')" class="bg-gradient-to-r from-brand-green to-brand-blue text-white font-bold py-4 px-8 rounded-xl hover:scale-105 transition-transform shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)]">
+                            Enter Application
+                        </button>
+                        <a href="#architecture" class="bg-dark-800 border border-white/10 text-white font-medium py-4 px-8 rounded-xl hover:bg-dark-700 transition-colors flex items-center justify-center gap-2">
+                            <i class="ph ph-code"></i> View Architecture
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture / SE Section -->
+            <section id="architecture" class="py-24 bg-dark-800/50 border-y border-white/5 relative z-10">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-white mb-4">System Architecture</h2>
+                        <p class="text-gray-400 max-w-2xl mx-auto">As a Software Engineering project, Sycamore is built upon strict computer science principles to ensure financial atomicity and data integrity.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-brand-blue mb-6 border border-blue-500/20">
+                                <i class="ph ph-tree-structure text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Finite State Machine</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Transactions follow a strict directional flow (PENDING → FUNDED → SHIPPED → COMPLETED). The system prevents illegal state transitions at the ledger level, ensuring funds cannot be double-spent or prematurely released.</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-brand-green mb-6 border border-green-500/20">
+                                <i class="ph ph-intersect text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Dual-Engine Processor</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">The architecture utilizes a polymorphic schema. 'Physical Goods' are verified via tracking logistics, while 'Crypto P2P' transactions map wallet addresses and await on-chain cryptographic hash verification.</p>
+                        </div>
+                        <div class="glass-card p-8 rounded-2xl">
+                            <div class="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center text-purple-400 mb-6 border border-purple-500/20">
+                                <i class="ph ph-lock-key text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">Role-Based Integrity</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Strict RBAC separation between Buyers, Sellers, and Admins. Only the Admin portal possesses the cryptographic authority to force-resolve disputed states and execute fiat transfers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="border-t border-white/5 py-8 text-center text-sm text-gray-500">
+            <p>Sycamore Escrow Platform. Final Year Software Engineering Project.</p>
+        </footer>
+    </div>
+
+    <!-- ================= VIEW: AUTHENTICATION ================= -->
+    <div id="view-auth" class="hidden min-h-screen flex items-center justify-center px-4 relative">
+        <button onclick="switchView('landing')" class="absolute top-8 left-8 text-gray-400 hover:text-white flex items-center gap-2 transition-colors">
+            <i class="ph ph-arrow-left"></i> Back to Home
+        </button>
+
+        <div class="w-full max-w-md glass-card p-8 rounded-3xl shadow-2xl border border-white/10 animate-slide-up">
+            <div class="flex flex-col items-center mb-8">
+                <div id="logo-container-auth" class="w-16 h-16 mb-4"></div>
+                <h2 id="auth-title" class="text-2xl font-bold text-white">Welcome Back</h2>
+                <p class="text-gray-400 text-sm mt-1">Sign in to manage your escrows</p>
+            </div>
+
+            <form id="auth-form" class="space-y-5" onsubmit="handleAuth(event)">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Username</label>
+                    <div class="relative">
+                        <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="text" id="auth-username" required class="w-full bg-dark-900 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-blue transition-colors" placeholder="Enter username">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-1">Password</label>
+                    <div class="relative">
+                        <i class="ph ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="password" id="auth-password" required class="w-full bg-dark-900 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white focus:outline-none focus:border-brand-blue transition-colors" placeholder="••••••••">
+                    </div>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-gradient-to-r from-brand-green to-brand-blue text-white font-bold py-3 rounded-xl hover:shadow-lg transition-all">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <button onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-sm text-brand-blue hover:text-blue-400 transition-colors">
+                    Don't have an account? Create one
+                </button>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/10 text-xs text-gray-500 text-center">
+                <p>Admin Access: <strong class="text-gray-300">MetaGie</strong> / <strong class="text-gray-300">Aliyoux@1</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VIEW: APPLICATION (DASHBOARDS) ================= -->
+    <div id="view-app" class="hidden h-screen flex overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-dark-800 border-r border-white/5 flex flex-col hidden md:flex shrink-0">
+            <div class="p-6 flex items-center gap-3 border-b border-white/5">
+                <div id="logo-container-app" class="w-8 h-8"></div>
+                <span class="text-lg font-bold gradient-text">Sycamore</span>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto" id="sidebar-nav">
+                <!-- Nav items generated via JS -->
+            </nav>
+
+            <div class="p-4 border-t border-white/5 bg-dark-900/50">
+                <div class="flex items-center gap-3 mb-4">
+                    <div id="user-avatar" class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-green to-brand-blue flex items-center justify-center text-white font-bold">U</div>
+                    <div class="overflow-hidden">
+                        <p id="user-display-name" class="text-sm font-medium text-white truncate">Username</p>
+                        <p id="user-role-badge" class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">ROLE</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors">
+                    <i class="ph ph-sign-out"></i> Secure Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+            <!-- Mobile Header -->
+            <header class="md:hidden h-16 border-b border-white/5 flex items-center justify-between px-4 bg-dark-800 shrink-0">
+                <div class="flex items-center gap-2">
+                    <div id="logo-container-mobile" class="w-6 h-6"></div>
+                    <span class="font-bold text-white">Sycamore</span>
+                </div>
+                <button onclick="logout()" class="text-gray-400"><i class="ph ph-sign-out text-xl"></i></button>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-8" id="dashboard-content">
+                <!-- Dashboard content injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Fund Wallet Modal -->
+    <div id="modal-fund" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-slide-up border border-white/10">
+            <div class="p-6 text-center border-b border-white/5 bg-dark-800">
+                <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/20">
+                    <i class="ph ph-wallet text-3xl text-brand-blue"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Fund Escrow Wallet</h3>
+                <p class="text-sm text-gray-400 mt-2">Transfer funds to your unique virtual account.</p>
+            </div>
+            <div class="p-6 bg-dark-900">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                        <span class="text-gray-500 text-sm">Bank Name</span>
+                        <span class="font-semibold text-white">OPay Digital Services</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                        <span class="text-gray-500 text-sm">Account Name</span>
+                        <span class="font-semibold text-white">Aliyu Garba Musa</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500 text-sm">Account Number</span>
+                        <span class="font-bold text-2xl text-white tracking-wider">7086676866</span>
+                    </div>
+                </div>
+                <button onclick="copyAccountInfo()" class="w-full mt-6 bg-dark-800 border border-white/10 text-white font-medium py-3 rounded-xl hover:bg-dark-700 transition-colors flex items-center justify-center gap-2">
+                    <i class="ph ph-copy"></i> Copy Account Number
+                </button>
+                <button onclick="closeModal('modal-fund')" class="w-full mt-3 text-gray-500 text-sm hover:text-white transition-colors py-2">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Escrow Modal -->
+    <div id="modal-create" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-slide-up border border-white/10">
+            <div class="p-5 border-b border-white/5 flex justify-between items-center bg-dark-800">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="ph-fill ph-shield-check text-brand-blue text-xl"></i> Create Escrow
+                </h3>
+                <button onclick="closeModal('modal-create')" class="text-gray-400 hover:text-white transition-colors"><i class="ph ph-x text-xl"></i></button>
+            </div>
+
+            <div class="p-6 bg-dark-900">
+                <!-- Engine Toggle -->
+                <div class="flex bg-dark-800 rounded-xl p-1 mb-6 border border-white/5">
+                    <button id="tab-goods" onclick="setEscrowType('GOODS')" class="flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 bg-dark-700 text-white shadow transition-all">
+                        <i class="ph ph-package"></i> Physical Goods
+                    </button>
+                    <button id="tab-crypto" onclick="setEscrowType('CRYPTO')" class="flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 text-gray-500 hover:text-gray-300 transition-all">
+                        <i class="ph ph-currency-btc"></i> Crypto P2P
+                    </button>
+                </div>
+
+                <form id="form-create-escrow" onsubmit="submitEscrow(event)" class="space-y-4">
+                    <input type="hidden" id="escrow-type" value="GOODS">
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Transaction Title</label>
+                        <input type="text" id="escrow-title" required class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-blue" placeholder="e.g. Macbook Pro M3">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1">Seller Username</label>
+                        <input type="text" id="escrow-seller" required class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-blue" placeholder="@username">
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <label id="label-amount" class="block text-sm font-medium text-gray-400 mb-1">Amount (NGN)</label>
+                            <input type="number" id="escrow-amount" required min="1" class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-blue" placeholder="0.00">
+                        </div>
+                        <div id="crypto-asset-container" class="w-1/3 hidden">
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Asset</label>
+                            <select id="escrow-asset" class="w-full bg-dark-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-brand-blue appearance-none">
+                                <option value="USDT">USDT</option>
+                                <option value="BTC">BTC</option>
+                                <option value="ETH">ETH</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-500/10 border border-blue-500/20 p-3 rounded-xl flex gap-3 mt-6">
+                        <i class="ph-fill ph-info text-brand-blue mt-0.5"></i>
+                        <p class="text-xs text-blue-200 leading-relaxed">
+                            Funds are locked securely in Sycamore's escrow vault. They are only released to the seller upon your explicit confirmation of receipt.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="w-full bg-white text-dark-900 font-bold py-3 rounded-xl mt-6 hover:bg-gray-200 transition-colors">
+                        Initialize Smart Escrow
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // --- CONSTANTS & SVG LOGO ---
+        const SVG_LOGO = `
+        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg">
+            <defs>
+                <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#22c55e" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+            </defs>
+            <path d="M50 5 L90 20 L90 50 C90 75 50 95 50 95 C50 95 10 75 10 50 L10 20 Z" fill="url(#shieldGrad)" />
+            <path d="M50 20 L65 45 L80 40 L60 65 L50 85 L40 65 L20 40 L35 45 Z" fill="#000000" opacity="0.8" />
+            <rect x="40" y="65" width="20" height="15" rx="3" fill="#0f172a" />
+            <path d="M45 65 V58 C45 54 55 54 55 58 V65" fill="none" stroke="#0f172a" stroke-width="4" />
+            <circle cx="50" cy="72" r="2" fill="#3b82f6" />
+        </svg>`;
+
+        const INITIAL_ADMIN = { id: 'admin-001', username: 'MetaGie', password: 'Aliyoux@1', role: 'ADMIN', balance: 0 };
+
+        // --- STATE MANAGEMENT ---
+        let appState = {
+            users: [],
+            transactions: [],
+            currentUser: null,
+            activeTab: 'overview'
+        };
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            // Inject Logos
+            document.querySelectorAll('[id^="logo-container"]').forEach(el => el.innerHTML = SVG_LOGO);
+
+            // Load Local Storage
+            const storedUsers = JSON.parse(localStorage.getItem('sycamore_users'));
+            appState.users = storedUsers && storedUsers.length > 0 ? storedUsers : [INITIAL_ADMIN];
+            appState.transactions = JSON.parse(localStorage.getItem('sycamore_transactions')) || [];
+            
+            const session = JSON.parse(localStorage.getItem('sycamore_session'));
+            if (session) {
+                appState.currentUser = session;
+                switchView('app');
+            } else {
+                switchView('landing');
+            }
+        };
+
+        function saveData() {
+            localStorage.setItem('sycamore_users', JSON.stringify(appState.users));
+            localStorage.setItem('sycamore_transactions', JSON.stringify(appState.transactions));
+            if(appState.currentUser) localStorage.setItem('sycamore_session', JSON.stringify(appState.currentUser));
+        }
+
+        // --- UI NAVIGATION ---
+        function switchView(viewName) {
+            document.getElementById('view-landing').classList.add('hidden');
+            document.getElementById('view-auth').classList.add('hidden');
+            document.getElementById('view-app').classList.add('hidden');
+
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            if (viewName === 'app' && appState.currentUser) {
+                renderAppLayout();
+            }
+        }
+
+        // --- TOAST NOTIFICATIONS ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bg = type === 'success' ? 'bg-green-500/90 border-green-500' : 'bg-red-500/90 border-red-500';
+            const icon = type === 'success' ? 'ph-check-circle' : 'ph-warning-circle';
+            
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-lg text-white shadow-xl backdrop-blur-md border ${bg} animate-slide-up transition-opacity duration-300`;
+            toast.innerHTML = `<i class="ph ${icon} text-xl"></i> <span class="text-sm font-medium">${message}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- AUTHENTICATION LOGIC ---
+        let isLoginMode = true;
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('auth-title').innerText = isLoginMode ? 'Welcome Back' : 'Create Account';
+            document.getElementById('auth-submit-btn').innerText = isLoginMode ? 'Sign In' : 'Register Securely';
+            document.getElementById('auth-toggle-btn').innerText = isLoginMode ? "Don't have an account? Create one" : "Already have an account? Sign in";
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const userVal = document.getElementById('auth-username').value.trim();
+            const passVal = document.getElementById('auth-password').value;
+
+            if (isLoginMode) {
+                const user = appState.users.find(u => u.username === userVal && u.password === passVal);
+                if (user) {
+                    appState.currentUser = user;
+                    saveData();
+                    showToast('Authentication successful');
+                    switchView('app');
+                } else {
+                    showToast('Invalid credentials', 'error');
+                }
+            } else {
+                if (appState.users.find(u => u.username === userVal)) {
+                    showToast('Username already exists', 'error');
+                    return;
+                }
+                const newUser = { id: `USR-${Date.now()}`, username: userVal, password: passVal, role: 'USER', balance: 0 };
+                appState.users.push(newUser);
+                appState.currentUser = newUser;
+                saveData();
+                showToast('Account created securely');
+                switchView('app');
+            }
+        }
+
+        function logout() {
+            appState.currentUser = null;
+            localStorage.removeItem('sycamore_session');
+            document.getElementById('auth-password').value = '';
+            switchView('landing');
+            showToast('Logged out securely');
+        }
+
+        // --- APPLICATION RENDER LOGIC ---
+        function renderAppLayout() {
+            // Update Sidebar Profile
+            const user = appState.currentUser;
+            document.getElementById('user-avatar').innerText = user.username.charAt(0).toUpperCase();
+            document.getElementById('user-display-name').innerText = user.username;
+            document.getElementById('user-role-badge').innerText = user.role;
+            document.getElementById('user-role-badge').className = `text-[10px] font-bold uppercase tracking-wider ${user.role === 'ADMIN' ? 'text-brand-blue' : 'text-brand-green'}`;
+
+            // Render Nav Items
+            const nav = document.getElementById('sidebar-nav');
+            const isAdmin = user.role === 'ADMIN';
+            
+            nav.innerHTML = `
+                <button onclick="changeAppTab('overview')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${appState.activeTab === 'overview' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}">
+                    <i class="ph ph-squares-four text-xl"></i> <span class="font-medium text-sm">Overview</span>
+                </button>
+            `;
+
+            if (isAdmin) {
+                nav.innerHTML += `
+                    <button onclick="changeAppTab('system')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${appState.activeTab === 'system' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}">
+                        <i class="ph ph-shield-star text-xl"></i> <span class="font-medium text-sm">System Ops</span>
+                    </button>
+                `;
+            }
+
+            renderDashboardContent();
+        }
+
+        function changeAppTab(tab) {
+            appState.activeTab = tab;
+            renderAppLayout();
+        }
+
+        function renderDashboardContent() {
+            const content = document.getElementById('dashboard-content');
+            const user = appState.currentUser;
+            
+            if (user.role === 'ADMIN') {
+                content.innerHTML = generateAdminDashboard();
+            } else {
+                content.innerHTML = generateUserDashboard();
+            }
+        }
+
+        // --- DASHBOARD GENERATORS ---
+        function generateUserDashboard() {
+            const user = appState.currentUser;
+            const myTxs = appState.transactions.filter(t => t.buyerId === user.id || t.sellerUsername === user.username);
+            const activeCount = myTxs.filter(t => t.status !== 'COMPLETED' && t.status !== 'CANCELLED').length;
+            
+            let html = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8 animate-fade-in">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white tracking-tight">Dashboard</h1>
+                        <p class="text-gray-400 mt-1">Manage your funds and active escrows.</p>
+                    </div>
+                    <button onclick="openModal('modal-create')" class="bg-white text-dark-900 px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                        <i class="ph-bold ph-plus"></i> New Escrow
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-slide-up">
+                    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-brand-blue border border-blue-500/20"><i class="ph-fill ph-wallet text-xl"></i></div>
+                            <button onclick="openModal('modal-fund')" class="text-xs font-bold text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors border border-white/10">Fund Wallet</button>
+                        </div>
+                        <p class="text-gray-400 text-sm font-medium relative z-10">Fiat Balance</p>
+                        <h3 class="text-3xl font-bold text-white mt-1 relative z-10">₦ ${user.balance.toLocaleString()}</h3>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400 border border-yellow-500/20 mb-4"><i class="ph-fill ph-shield-check text-xl"></i></div>
+                        <p class="text-gray-400 text-sm font-medium">Active Transactions</p>
+                        <h3 class="text-3xl font-bold text-white mt-1">${activeCount}</h3>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold text-white mb-4">Transaction History</h2>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    ${myTxs.length === 0 ? `
+                        <div class="p-12 text-center text-gray-500 flex flex-col items-center">
+                            <i class="ph ph-archive-box text-5xl mb-3 opacity-30"></i>
+                            <p>No transactions found.</p>
+                        </div>
+                    ` : `
+                        <div class="divide-y divide-white/5">
+                            ${myTxs.sort((a,b)=>b.timestamp - a.timestamp).map(tx => generateTransactionRow(tx, false)).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+            return html;
+        }
+
+        function generateAdminDashboard() {
+            const txs = appState.transactions;
+            const totalVolume = txs.filter(t => t.type==='GOODS').reduce((sum, t) => sum + Number(t.amount), 0);
+            const pendingCount = txs.filter(t => t.status === 'PENDING').length;
+            const fundedCount = txs.filter(t => t.status === 'FUNDED').length;
+
+            let html = `
+                <div class="mb-8 animate-fade-in">
+                    <h1 class="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+                        <i class="ph-fill ph-shield-star text-brand-blue"></i> Command Center
+                    </h1>
+                    <p class="text-gray-400 mt-1">Platform-wide overview and administrative override.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slide-up">
+                    <div class="glass-card p-5 rounded-2xl border-l-2 border-l-brand-blue">
+                        <p class="text-gray-400 text-sm font-medium">Total Fiat Volume</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">₦ ${totalVolume.toLocaleString()}</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border-l-2 border-l-brand-green">
+                        <p class="text-gray-400 text-sm font-medium">Locked in Escrow (FUNDED)</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">${fundedCount}</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border-l-2 border-l-yellow-500">
+                        <p class="text-gray-400 text-sm font-medium">Awaiting Payment (PENDING)</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">${pendingCount}</h3>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl border-l-2 border-l-purple-500">
+                        <p class="text-gray-400 text-sm font-medium">Total Users</p>
+                        <h3 class="text-2xl font-bold text-white mt-1">${appState.users.length}</h3>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-4 border-b border-white/5 bg-dark-800/50 flex justify-between items-center">
+                        <h3 class="font-bold text-white">Global Ledger</h3>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        ${txs.length === 0 ? `<div class="p-8 text-center text-gray-500">Ledger is empty.</div>` : 
+                          txs.sort((a,b)=>b.timestamp - a.timestamp).map(tx => generateTransactionRow(tx, true)).join('')}
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
+        function generateTransactionRow(tx, isAdmin) {
+            const isCrypto = tx.type === 'CRYPTO';
+            const icon = isCrypto ? '<i class="ph-fill ph-currency-btc text-xl text-orange-400"></i>' : '<i class="ph-fill ph-package text-xl text-brand-blue"></i>';
+            const iconBg = isCrypto ? 'bg-orange-500/10 border-orange-500/20' : 'bg-blue-500/10 border-blue-500/20';
+            
+            let statusBadge = '';
+            switch(tx.status) {
+                case 'PENDING': statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">PENDING PAY</span>'; break;
+                case 'FUNDED': statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-blue/10 text-brand-blue border border-brand-blue/20">IN ESCROW</span>'; break;
+                case 'COMPLETED': statusBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-green/10 text-brand-green border border-brand-green/20">COMPLETED</span>'; break;
+            }
+
+            const isBuyer = !isAdmin && tx.buyerId === appState.currentUser.id;
+            let actionBtn = '';
+
+            if (isAdmin && tx.status === 'FUNDED') {
+                actionBtn = `<button onclick="updateTxStatus('${tx.id}', 'COMPLETED')" class="px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 rounded-lg text-xs font-bold transition-colors">Force Release</button>`;
+            } else if (isBuyer) {
+                if (tx.status === 'PENDING') {
+                    actionBtn = `<button onclick="updateTxStatus('${tx.id}', 'FUNDED')" class="px-3 py-1.5 bg-brand-blue text-white hover:bg-blue-600 rounded-lg text-xs font-bold transition-colors shadow-lg shadow-blue-500/20">Pay into Escrow</button>`;
+                } else if (tx.status === 'FUNDED') {
+                    actionBtn = `<button onclick="updateTxStatus('${tx.id}', 'COMPLETED')" class="px-3 py-1.5 bg-brand-green text-white hover:bg-green-600 rounded-lg text-xs font-bold transition-colors shadow-lg shadow-green-500/20">Confirm Receipt</button>`;
+                }
+            } else if (!isAdmin && !isBuyer) {
+                 actionBtn = `<span class="text-xs text-gray-500">Seller View</span>`;
+            }
+
+            return `
+                <div class="p-4 sm:p-5 hover:bg-white/[0.02] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center border shrink-0 ${iconBg}">${icon}</div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-0.5">
+                                <h4 class="font-bold text-white text-sm">${tx.title}</h4>
+                                ${statusBadge}
+                            </div>
+                            <p class="text-xs text-gray-400 flex items-center gap-2">
+                                <span class="font-mono text-gray-500">${tx.id}</span> • Buyer: ${tx.buyerUsername} • Seller: ${tx.sellerUsername}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-6 sm:w-1/3">
+                        <div class="text-left sm:text-right shrink-0">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold mb-0.5">${isCrypto ? 'Crypto Value' : 'Fiat Amount'}</p>
+                            <p class="font-bold text-white">${isCrypto ? tx.amount + ' ' + tx.asset : '₦ ' + Number(tx.amount).toLocaleString()}</p>
+                        </div>
+                        <div>${actionBtn}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- ESCROW TRANSACTION LOGIC ---
+        function setEscrowType(type) {
+            document.getElementById('escrow-type').value = type;
+            const btnGoods = document.getElementById('tab-goods');
+            const btnCrypto = document.getElementById('tab-crypto');
+            
+            if (type === 'GOODS') {
+                btnGoods.className = "flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 bg-dark-700 text-white shadow transition-all";
+                btnCrypto.className = "flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 text-gray-500 hover:text-gray-300 transition-all";
+                document.getElementById('label-amount').innerText = 'Amount (NGN)';
+                document.getElementById('crypto-asset-container').classList.add('hidden');
+                document.getElementById('escrow-title').placeholder = 'e.g. Macbook Pro M3';
+            } else {
+                btnCrypto.className = "flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 bg-dark-700 text-white shadow transition-all";
+                btnGoods.className = "flex-1 py-2 text-sm font-medium rounded-lg flex items-center justify-center gap-2 text-gray-500 hover:text-gray-300 transition-all";
+                document.getElementById('label-amount').innerText = 'Amount';
+                document.getElementById('crypto-asset-container').classList.remove('hidden');
+                document.getElementById('escrow-title').placeholder = 'e.g. P2P Trade 500 USDT';
+            }
+        }
+
+        function submitEscrow(e) {
+            e.preventDefault();
+            const type = document.getElementById('escrow-type').value;
+            const title = document.getElementById('escrow-title').value;
+            const sellerUsername = document.getElementById('escrow-seller').value;
+            const amount = document.getElementById('escrow-amount').value;
+            const asset = document.getElementById('escrow-asset').value;
+
+            if(sellerUsername === appState.currentUser.username) {
+                showToast("You cannot create an escrow with yourself.", "error");
+                return;
+            }
+
+            const newTx = {
+                id: 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+                timestamp: Date.now(),
+                type: type,
+                title: title,
+                amount: amount,
+                asset: type === 'CRYPTO' ? asset : 'NGN',
+                buyerId: appState.currentUser.id,
+                buyerUsername: appState.currentUser.username,
+                sellerUsername: sellerUsername,
+                status: 'PENDING'
+            };
+
+            appState.transactions.push(newTx);
+            saveData();
+            closeModal('modal-create');
+            showToast('Escrow transaction initialized securely');
+            renderDashboardContent();
+            document.getElementById('form-create-escrow').reset();
+            setEscrowType('GOODS');
+        }
+
+        function updateTxStatus(txId, newStatus) {
+            const txIndex = appState.transactions.findIndex(t => t.id === txId);
+            if (txIndex === -1) return;
+
+            // Basic simulation of balance deduction for prototype
+            if (newStatus === 'FUNDED' && appState.currentUser.role !== 'ADMIN') {
+                 // In a real app, this happens via Payment Gateway Webhook.
+                 // For UI simulation, we just allow it.
+            }
+
+            appState.transactions[txIndex].status = newStatus;
+            saveData();
+            
+            if(newStatus === 'FUNDED') showToast('Funds secured in Smart Contract.');
+            if(newStatus === 'COMPLETED') showToast('Transaction completed. Funds released.');
+            
+            renderDashboardContent();
+        }
+
+        // --- UTILS & MODALS ---
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function copyAccountInfo() {
+            navigator.clipboard.writeText("7086676866");
+            showToast("OPay Account Number Copied!");
+        }
+
+    </script>
+</body>
 </html>
